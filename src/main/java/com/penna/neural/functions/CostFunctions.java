@@ -1,34 +1,55 @@
 package com.penna.neural.functions;
 
 import org.jblas.DoubleMatrix;
-
 import com.penna.neural.common.DoubleMatrixUtils;
 import com.penna.neural.functions.ActivationFunctions;
 
+/**
+ * Cost functions that can be used in the neural network.
+ * 
+ * @author mpennacchiotti
+ *
+ */
 public enum CostFunctions {
+    /**
+     * Quadratic cost function
+     */
     QUADRATIC {
-        // (a-y) @ (a @ (1-a))
+        // Computes derivative of the cost function, as: (a-y) @ (a @ (1-a)), where 'a' is the
+        //activation, 'y' the labels. 
         @Override
         public DoubleMatrix derivative(DoubleMatrix activations, DoubleMatrix output, ActivationFunctions actFunc) {
             DoubleMatrix tmp = activations.sub(output);
-            //System.out.println(" activ - output : \n" + DoubleMatrixUtils.toString(tmp));
             DoubleMatrix activ = actFunc.derivative(activations);
-            //System.out.println(" activ deriv : \n" + DoubleMatrixUtils.toString(activ));
             DoubleMatrix ret = (activations.sub(output)).mul(activ);
-            //System.out.println(" (activ - output)*(activ*(1-activ)) : \n" + DoubleMatrixUtils.toString(ret));
             return ret;
         }
     },
+    /**
+     * Cross entropy cost function
+     */
     CROSS_ENTROPY {
-        // (a-y)
+        // Computes derivative of the cost function, as: (a-y), where 'a' is the activation, 'y'
+        //the labels. 
         @Override
         public DoubleMatrix derivative(DoubleMatrix activations, DoubleMatrix output,
                 ActivationFunctions actFunc) {
             return activations.sub(output);
         }
     };
+    
+    /**
+     * Computes the derivative of the cost function at the output layer with respect to the zeta
+     * of the neuron.
+     *  
+     * @param activations the activations of the output layer
+     * @param output the expected labels of the instance
+     * @param actFunc the activation function of the neural network 
+     * @return the derivative
+     */
     public abstract DoubleMatrix derivative(DoubleMatrix activations, DoubleMatrix output,
             ActivationFunctions actFunc);
+   
     
     public static void main(String[] arg) {
         
