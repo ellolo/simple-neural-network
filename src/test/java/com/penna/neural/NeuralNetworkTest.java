@@ -3,7 +3,7 @@ package com.penna.neural;
 import org.jblas.DoubleMatrix;
 import org.junit.Test;
 
-import com.penna.neural.NeuralNetwork;
+import com.penna.neural.core.NeuralNetwork;
 import com.penna.neural.functions.ActivationFunctions;
 import com.penna.neural.functions.CostFunctions;
 

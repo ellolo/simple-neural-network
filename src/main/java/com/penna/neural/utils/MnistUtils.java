@@ -1,4 +1,4 @@
-package com.penna.neural.common;
+package com.penna.neural.utils;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -7,32 +7,29 @@ import java.util.logging.Logger;
 
 import org.jblas.DoubleMatrix;
 
+import com.penna.neural.core.Dataset;
+import com.penna.neural.core.Instance;
+
 /**
- * The DataSetReader class contains static methods to read datasets for the
- * neural network.
+ * This class contains utility methods for the MNIST dataset
  * 
  * @author mpennacchiotti
  * 
  */
-public class DatasetReader {
+public class MnistUtils {
 
-    private static final Logger LOGGER = Logger.getLogger(DatasetReader.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(MnistUtils.class.getName());
 
     /**
-     * Reads Mnist dataset (as in http://yann.lecun.com/exdb/mnist/) storing the
-     * data in a GoldSet. The Mnist dataset contains images of digits (from 0 to
-     * 9) represented as matrixes of pixels. Each image comes with its label,
-     * i.e. the digit that it represents.
+     * The method reads Mnist dataset (http://yann.lecun.com/exdb/mnist/). The dataset contains
+     * images of digits (from 0 to 9) represented as matrixes of pixels. Each image comes with its
+     * array of labels, all set to 0 but the label of the represented digit.
+     * This methid reusues code from Reuses code from https://code.google.com/p/pen-ui/.
      * 
-     * Each instance of the minst dataset is constitued by an image and la
-     * Reuses code from pen-ui project (https://code.google.com/p/pen-ui/)
-     * 
-     * @param labelFile
-     *            file containing labels of the dataset instances
-     * @param imageFile
-     *            file containing features of the dataset instances
-     * @return a dataset structure
-     * @throws IOException
+     * @param labelFile path of file containing labels of the dataset instances
+     * @param imageFile path of file containing features of the dataset instances
+     * @return a dataset structure containing the read dataset
+     * @throws IOException if a path is not found
      */
     public static Dataset readMNISTdata(String labelFile, String imageFile) throws IOException {
 
@@ -88,17 +85,6 @@ public class DatasetReader {
                 DoubleMatrix labelMatrix = DoubleMatrix.zeros(10, 1);
                 labelMatrix.put(label, 1);
                 DoubleMatrix dImage = new DoubleMatrix(image);
-                /*System.out.println("\n*************");
-                System.out.println(label);
-                int ct = 0;
-                for (int i = 0; i < numRows; i++){
-                    for (int j = 0; j < numCols; j++){
-                        System.out.print(image[ct] + " ");
-                        ct++;
-                    }
-                    System.out.print("\n");
-                }*/
-                
                 Instance instance = new Instance(dImage, labelMatrix);
                 dataset.add(instance);
                 if ((numLabelsRead % 1000) == 0) {
@@ -111,6 +97,24 @@ public class DatasetReader {
         } finally {
             labels.close();
             images.close();
+        }
+    }
+    
+    /**
+     * Prints an image from its matrix representation. Each element of the matrix is the color
+     * value for the respective pixel of the image.
+     * @param image image's matrix 
+     * @param numRows number of rows in the matrix
+     * @param numCols number of columns in the matrix
+     */
+    public static void printImage(double[][] image, int numRows, int numCols) {
+        int ct = 0;
+        for (int i = 0; i < numRows; i++){
+            for (int j = 0; j < numCols; j++){
+                System.out.print(image[ct] + " ");
+                ct++;
+            }
+            System.out.print("\n");
         }
     }
 

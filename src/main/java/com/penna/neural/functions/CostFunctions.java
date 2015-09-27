@@ -1,8 +1,8 @@
 package com.penna.neural.functions;
 
 import org.jblas.DoubleMatrix;
-import com.penna.neural.common.DoubleMatrixUtils;
 import com.penna.neural.functions.ActivationFunctions;
+import com.penna.neural.utils.DoubleMatrixUtils;
 
 /**
  * Cost functions that can be used in the neural network.

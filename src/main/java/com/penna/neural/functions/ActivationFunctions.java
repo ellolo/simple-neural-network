@@ -3,6 +3,8 @@ package com.penna.neural.functions;
 import org.jblas.DoubleMatrix;
 import org.jblas.MatrixFunctions;
 
+import com.penna.neural.utils.DoubleMatrixUtils;
+
 /**
  * Activation functions that can be used in the neural network.
  * 
@@ -28,7 +30,6 @@ public enum ActivationFunctions {
         @Override
         public DoubleMatrix derivative(DoubleMatrix activations) {
             DoubleMatrix ret = activations.mul(DoubleMatrix.ones(activations.rows, 1).sub(activations));
-            //System.out.println(" activ * (1 - activ) : \n" + DoubleMatrixUtils.toString(ret));
             return ret;
         }
     },
@@ -45,7 +46,7 @@ public enum ActivationFunctions {
         // Derivative of the activation function 1 - a^2.
         @Override
         public DoubleMatrix derivative(DoubleMatrix activations) {
-            return DoubleMatrix.ones(activations.rows, 1).sub(activations.mmul(activations));
+            return DoubleMatrix.ones(activations.rows, 1).sub(activations.mul(activations));
         }
     };
     
