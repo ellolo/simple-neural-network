@@ -277,7 +277,7 @@ public class NeuralNetwork {
         for (int epoch = 0; epoch < numEpochs; epoch++) {
             trainingSet.shuffle();
             currIndex = 0;
-            LOGGER.info("Gradient descent epoch : " + epoch);
+            LOGGER.info("Gradient descent epoch : " + epoch + " (of " + numEpochs + ")");
             for (int j = 0; j < numBatches - 1; j++) {
                 trainingBatch = trainingSet.getSubSet(currIndex, currIndex + miniBatchSize);
                 LOGGER.fine("  Minibatch: " + j);

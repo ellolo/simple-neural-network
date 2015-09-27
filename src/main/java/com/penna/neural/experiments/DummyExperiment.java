@@ -25,7 +25,7 @@ public class DummyExperiment {
         Instance trainingIns3 = new Instance(new DoubleMatrix(new double[][] { { 1.5 }, { -1.0 }, { 5.0 } }), new DoubleMatrix(new double[][] { { 0.0 }, { 0.9 }, { 0.1 }, { 0.0 } }));
         Instance trainingIns4 = new Instance(new DoubleMatrix(new double[][] { { 0.0 }, { 6.0 }, { 0.0 } }), new DoubleMatrix(new double[][] { { 0.0 }, { 0.1 }, { 0.0 }, { 0.9 } }));
         
-        //Adding trianing instances to dataset
+        // Adding trianing instances to dataset
         Dataset trainSet = new Dataset();
         trainSet.add(trainingIns1);
         trainSet.add(trainingIns2);
@@ -33,10 +33,10 @@ public class DummyExperiment {
         trainSet.add(trainingIns4);
         
         NeuralNetwork nn = new NeuralNetwork(new int[]{3,5,4}, CostFunctions.QUADRATIC, ActivationFunctions.SIGMOID);
-        int ephocs = 100;
+        int epochs = 100;
         double learningRate = 3;
         int miniBatchSize = 2;
-        nn.stocasticGradientDescent(trainSet, ephocs, learningRate, miniBatchSize);
+        nn.stocasticGradientDescent(trainSet, epochs, learningRate, miniBatchSize);
         DoubleMatrix output = nn.feedForward(new DoubleMatrix(new double[][]{{ 0.0 }, { 8.0 }, { 0.5 }}));
         System.out.println("Prediction for input instance:");
         System.out.println(DoubleMatrixUtils.toString(output));

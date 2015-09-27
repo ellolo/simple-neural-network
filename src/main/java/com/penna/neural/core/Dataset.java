@@ -10,7 +10,7 @@ import org.jblas.DoubleMatrix;
 
 import com.penna.neural.utils.MnistUtils;
 
-public class Dataset{
+public class Dataset implements Iterable<Instance> {
     
     private static final Logger LOGGER = Logger.getLogger(MnistUtils.class.getName());
     
@@ -69,7 +69,7 @@ public class Dataset{
     public Iterator<Instance> getInstances() {
         return instances.iterator();
     }
-
+    
     public Iterator<Instance> iterator() {
         return getInstances();
     }
