@@ -25,6 +25,9 @@ From project root:
 where `<experiment runner>` is a shell script that executes one of the
 experiments in the `script` directory. 
 
+Please note that MNIST based experiments are resource intensive and may take a
+long time to execute.
+
 Further information and questions
 ---------------------------------
 email to <marco.pennacchiotti@gmail.com>
