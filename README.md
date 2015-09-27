@@ -18,11 +18,11 @@ Running sample experiment
 -------------------------
 From project root:
 
-   $ cd src/main/scripts
-   $ sh \<experiment runner\>
+    $ cd src/main/scripts
+    $ sh \<experiment runner\>
 
 Where `<experiment runner>` is a shell script that executes one of the
-experiments or the `script` directory. 
+experiments in the `script` directory. 
 
 Further information and questions
 ---------------------------------
