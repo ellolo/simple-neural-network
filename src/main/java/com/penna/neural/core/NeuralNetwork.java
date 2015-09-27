@@ -4,8 +4,10 @@ import java.util.logging.Logger;
 import org.jblas.DoubleMatrix;
 import com.penna.neural.exceptions.NetworkInitializationException;
 import com.penna.neural.exceptions.NoLabelException;
-import com.penna.neural.functions.*;
-import com.penna.neural.utils.*;
+import com.penna.neural.functions.ActivationFunctions;
+import com.penna.neural.functions.CostFunctions;
+import com.penna.neural.utils.DoubleMatrixUtils;
+import com.penna.neural.utils.MnistUtils;
 
 /**
  * Implementation of a simple neural network. Activations, weights and biases

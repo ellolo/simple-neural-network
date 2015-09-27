@@ -71,14 +71,14 @@ public class MnistBinaryExperiment {
         String imageFileTe = path + "/t10k-images-idx3-ubyte";
         Dataset trainingSet = MnistUtils.readMNISTdata(labelFileTr, imageFileTr);
         Dataset testSet = MnistUtils.readMNISTdata(labelFileTe, imageFileTe);
-        Dataset binaryTrainingSet = getBinaryDataset(trainingSet, 1, 8, 500);
+        Dataset binaryTrainingSet = getBinaryDataset(trainingSet, 1, 8, 1000);
         Dataset binaryTestSet = getBinaryDataset(testSet, 1, 8, 500);
 
         // Setting up network and training
         int[] layerSizes = { 784, 10, 10 };
         NeuralNetwork nn = new NeuralNetwork(layerSizes, CostFunctions.QUADRATIC,
                 ActivationFunctions.SIGMOID);
-        int epochs = 2;
+        int epochs = 30;
         double learningRate = 0.1d;
         int miniBatchSize = 10;
         nn.stocasticGradientDescent(binaryTrainingSet, epochs, learningRate, miniBatchSize);

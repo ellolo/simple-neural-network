@@ -40,13 +40,13 @@ public class MnistExperiment {
         String imageFileTe = path + "/t10k-images-idx3-ubyte";
         Dataset trainingSet = MnistUtils.readMNISTdata(labelFileTr, imageFileTr);
         Dataset testSet = MnistUtils.readMNISTdata(labelFileTe, imageFileTe);
-
+        trainingSet = trainingSet.getSubSet(0, 30000);
         // Setting up network and training
         int[] layerSizes = { 784, 30, 10 };
         NeuralNetwork nn = new NeuralNetwork(layerSizes, CostFunctions.QUADRATIC,
                 ActivationFunctions.SIGMOID);
-        int epochs = 20;
-        double learningRate = 0.5d;
+        int epochs = 50;
+        double learningRate = 0.1d;
         int miniBatchSize = 10;
         nn.stocasticGradientDescent(trainingSet, epochs, learningRate, miniBatchSize);
         List<DoubleMatrix> trueLabels = new ArrayList<DoubleMatrix>();
