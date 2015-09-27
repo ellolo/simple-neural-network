@@ -8,18 +8,24 @@ import com.penna.neural.functions.*;
 import com.penna.neural.utils.*;
 
 /**
- * Implementation of a simple neural network. Activations, weights and biases are represented with
- * jblas DoubleMatrixes. The neural network supports the following functions:
- * Cost functions:
- * - quadratic
- * - cross entropy
- * Activation functions:
- * - sigmoid
- * - tanh
- * Training is performed by gradient descent/backtracking.
- *  
+ * Implementation of a simple neural network. Activations, weights and biases
+ * are represented with jblas DoubleMatrixes. The neural network supports the
+ * following functions:
+ * <ul>
+ * <li>Cost functions:</li>
+ * <ul>
+ * <li>quadratic</li>
+ * <li>cross entropy</li>
+ * </ul>
+ * <li>Activation functions:</li>
+ * <ul>
+ * <li>sigmoid</li>
+ * <li>tanh</li>
+ * </ul>
+ * </ul> Training is performed by gradient descent/backtracking.
+ * 
  * @author mpennacchiotti
- *
+ * 
  */
 public class NeuralNetwork {
 
@@ -32,20 +38,20 @@ public class NeuralNetwork {
     private final int[] layerSizes;
     // biases, array of one dimensional matrix
     private DoubleMatrix[] biases;
-    // weights,  array of matrixes
+    // weights, array of matrixes
     private DoubleMatrix[] weights;
     // cost function used by the network
     private CostFunctions costFunction;
     // activation function used by the network
     private ActivationFunctions activationFunction;
-  
 
     /**
-     * Construct a neural network, given the specifics in input. All parameters are initialized
-     * randomly. This is the preferred network constructor 
+     * Construct a neural network, given the specifics in input. All parameters
+     * are initialized randomly. This is the preferred network constructor
      * 
-     * @param layerSizes an array containing the number of neurons for each layer
-     * @param costFunc the cost function that will be use by the netowrk 
+     * @param layerSizes an array containing the number of neurons for each
+     *            layer
+     * @param costFunc the cost function that will be use by the netowrk
      * @param activFunc the activation function that will be use by the netowrk
      * @throws NetworkInitializationException
      */
@@ -59,16 +65,17 @@ public class NeuralNetwork {
         randomInitialization();
         LOGGER.info("Random initialization completed successfully");
     }
-    
+
     /**
-     * Construct a neural network, given the specifics in input. Parameters values are input
-     * explicitly
+     * Construct a neural network, given the specifics in input. Parameters
+     * values are input explicitly
      * 
-     * @param layerSizes an array containing the number of neurons for each layer
-     * @param biases an array containing the biases' matrix of each layer 
-     * @param weightsan array containing the weights' matrix of each layer
-     * @param costFunc the cost function that will be use by the netowrk 
-     * @param activFunc the activation function that will be use by the netowrk
+     * @param layerSizes an array containing the number of neurons for each
+     *            layer
+     * @param biases an array containing the biases' matrix of each layer
+     * @param weights an array containing the weights' matrix of each layer
+     * @param costFunc the cost function that will be use by the network
+     * @param activFunc the activation function that will be use by the network
      * @throws NetworkInitializationException
      */
     public NeuralNetwork(int[] layerSizes, DoubleMatrix[] biases, DoubleMatrix[] weights,
@@ -84,10 +91,10 @@ public class NeuralNetwork {
         this.activationFunction = activFunc;
         LOGGER.info("Initialization completed successfully");
     }
-    
+
     /**
-     * Randomly initializes the parameters of the neural network using from a normal
-     * distribution. 
+     * Randomly initializes the parameters of the neural network using from a
+     * normal distribution.
      */
     private void randomInitialization() {
         biases = new DoubleMatrix[totLayer - 1];
@@ -104,26 +111,31 @@ public class NeuralNetwork {
     }
 
     /**
-     * Validates that, for each layer, there is at least one neuron 
+     * Validates that, for each layer, there is at least one neuron
      * 
-     * @param layerSizes an array containing the number of neurons for each layer
+     * @param layerSizes an array containing the number of neurons for each
+     *            layer
      * @throws NetworkInitializationException if validation fails
      */
     private void validateLayers(int[] layerSizes) throws NetworkInitializationException {
-        if (layerSizes.length < 2 || layerSizes.length > MAX_NUM_LAYERS){
-            throw new NetworkInitializationException("Number of layers must be between 2 and " + MAX_NUM_LAYERS);
+        if (layerSizes.length < 2 || layerSizes.length > MAX_NUM_LAYERS) {
+            throw new NetworkInitializationException("Number of layers must be between 2 and "
+                    + MAX_NUM_LAYERS);
         }
         for (int size : layerSizes) {
             if (size < 1 || size > MAX_LAYER_SIZE) {
-                throw new NetworkInitializationException("Layer size must be between 0 and " + MAX_LAYER_SIZE);
+                throw new NetworkInitializationException("Layer size must be between 0 and "
+                        + MAX_LAYER_SIZE);
             }
         }
     }
 
     /**
-     * Validates that the biases and the weights conform to the specified layer sizes.
+     * Validates that the biases and the weights conform to the specified layer
+     * sizes.
      * 
-     * @param layerSizes an array containing the number of neurons for each layer 
+     * @param layerSizes an array containing the number of neurons for each
+     *            layer
      * @param biases an array containing the biases' matrix of each layer
      * @param weights an array containing the weights' matrix of each layer
      * @throws NetworkInitializationException
@@ -143,7 +155,7 @@ public class NeuralNetwork {
             }
         }
     }
-    
+
     public DoubleMatrix[] getWeights() {
         return weights;
     }
@@ -151,10 +163,11 @@ public class NeuralNetwork {
     public DoubleMatrix[] getBiases() {
         return biases;
     }
-    
+
     /**
-     * Initializes delta parameter matrixes, weights and biases, to zero for every layer. These
-     * are the matrixes that store the output of the backtracking algorithm.
+     * Initializes delta parameter matrixes, weights and biases, to zero for
+     * every layer. These are the matrixes that store the output of the
+     * backtracking algorithm.
      * 
      * @return initialized weights and bias matrixes
      */
@@ -171,8 +184,8 @@ public class NeuralNetwork {
     }
 
     /**
-     * Initializes activation matrix to zero for every layer. This matrix is used by
-     * backpropagation during the learning phase. 
+     * Initializes activation matrix to zero for every layer. This matrix is
+     * used by backpropagation during the learning phase.
      * 
      * @return initialized activation matrix
      */
@@ -190,7 +203,8 @@ public class NeuralNetwork {
      * 
      * @param instance the instance for which to backpropagate
      * @return parameter delta, weights and biases
-     * @throws NoLabelException if the instance doesn't have a label, i.e. is not a trining intance
+     * @throws NoLabelException if the instance doesn't have a label, i.e. is
+     *             not a trining intance
      */
     private ParameterDeltas backPropagation(Instance instance) throws NoLabelException {
         // Notation:
@@ -198,59 +212,62 @@ public class NeuralNetwork {
         // b = biases at layer
         // a = activations at layer
         // z = zeta, i.e. w * a-1 + b
-        // d = delta, i.e. the derivative of the cost function  w.r.t. zeta
+        // d = delta, i.e. the derivative of the cost function w.r.t. zeta
         // -1 = previous layer
-        ParameterDeltas initializedDeltas = initializeDeltaParameters();  
+        ParameterDeltas initializedDeltas = initializeDeltaParameters();
         DoubleMatrix[] deltaWeights = initializedDeltas.deltaWeights;
         DoubleMatrix[] deltaBiases = initializedDeltas.deltaBiases;
         DoubleMatrix[] activations = initializeActivation();
         // feed forward
         activations[0] = instance.getFeatures();
         for (int layer = 1; layer < totLayer; layer++) {
-            // z = w * a_-1 + b 
-            DoubleMatrix zetas = (weights[layer - 1].mmul(activations[layer - 1])).add(biases[layer - 1]);
+            // z = w * a_-1 + b
+            DoubleMatrix zetas = (weights[layer - 1].mmul(activations[layer - 1]))
+                    .add(biases[layer - 1]);
             activations[layer] = activationFunction.activate(zetas);
         }
         // backward propagation
         // d = a @ (1-a) @ (-(y-a))
-        DoubleMatrix delta = costFunction.derivative(activations[totLayer - 1], instance.getLabels(), activationFunction); 
+        DoubleMatrix delta = costFunction.derivative(activations[totLayer - 1],
+                instance.getLabels(), activationFunction);
         LOGGER.fine(" delta: \n" + DoubleMatrixUtils.toString(deltaBiases[totLayer - 2]));
         // w = d * a_-1
-        deltaWeights[totLayer - 2] = delta.mmul(activations[totLayer - 2].transpose()); 
+        deltaWeights[totLayer - 2] = delta.mmul(activations[totLayer - 2].transpose());
         // b = d
         deltaBiases[totLayer - 2] = delta;
         for (int layer = totLayer - 2; layer > 0; layer--) {
             DoubleMatrix activationDeriv = activationFunction.derivative(activations[layer]);
             // d = a @ (1-a) @ (w_+1 * d_+1)
-            delta = (weights[layer].transpose().mmul(delta)).mul(activationDeriv); 
+            delta = (weights[layer].transpose().mmul(delta)).mul(activationDeriv);
             // w = d * a_-1
             deltaWeights[layer - 1] = delta.mmul(activations[layer - 1].transpose());
             // b = d
             deltaBiases[layer - 1] = delta;
         }
         ParameterDeltas parameterDeltas = new ParameterDeltas(deltaWeights, deltaBiases);
-            return parameterDeltas;
+        return parameterDeltas;
     }
 
     /**
-     * Performs backpropagation for the instances in the input dataset, and updates the weights and
-     * biases according to the increment matrixes returned by the backpropagation.
-     *  
+     * Performs backpropagation for the instances in the input dataset, and
+     * updates the weights and biases according to the increment matrixes
+     * returned by the backpropagation.
+     * 
      * @param trainingBatch the set of instances to be backpropagated
      * @param learnRate the learning rate for the increments
      * @param batchSize size of the set of instances
      */
     private void updateParameters(Dataset trainingBatch, double learnRate, int batchSize) {
-        //for (Instance instance: trainingBatch){
-        for (int i = 0; i < trainingBatch.size(); i++){
-            try{
-                Instance instance = trainingBatch.getInstance(i);
+        for (Instance instance : trainingBatch) {
+            try {
                 ParameterDeltas parameterDeltas = backPropagation(instance);
                 DoubleMatrix[] deltaBiases = parameterDeltas.deltaBiases;
                 DoubleMatrix[] deltaWeights = parameterDeltas.deltaWeights;
                 for (int layer = 1; layer < totLayer; layer++) {
-                    biases[layer - 1] = biases[layer - 1].sub((deltaBiases[layer - 1]).mul(learnRate).div(batchSize));
-                    weights[layer - 1] = weights[layer - 1].sub((deltaWeights[layer - 1]).mul(learnRate).div(batchSize));
+                    biases[layer - 1] = biases[layer - 1].sub((deltaBiases[layer - 1]).mul(
+                            learnRate).div(batchSize));
+                    weights[layer - 1] = weights[layer - 1].sub((deltaWeights[layer - 1]).mul(
+                            learnRate).div(batchSize));
                 }
             } catch (NoLabelException nle) {
                 LOGGER.severe("Found instance without label. Learning may be unstable");
@@ -262,15 +279,16 @@ public class NeuralNetwork {
      * Performs gradient descent learning on a given dataset.
      * 
      * @param trainingSet the training set used for learning
-     * @param numEpochs the number of epochs of the training 
+     * @param numEpochs the number of epochs of the training
      * @param learnRate the learning rate for parameter updates
      * @param miniBatchSize minibatch size for parameter update
      */
     public void stocasticGradientDescent(Dataset trainingSet, int numEpochs, double learnRate,
             int miniBatchSize) throws NetworkInitializationException {
-        if (trainingSet.size() < 1 || numEpochs < 1 || learnRate <= 0 || miniBatchSize < 1){
+        if (trainingSet.size() < 1 || numEpochs < 1 || learnRate <= 0 || miniBatchSize < 1) {
             throw new NetworkInitializationException("Invalid gradient descent parameters.");
         }
+        LOGGER.info("Gradient descent training started");
         Dataset trainingBatch;
         int numBatches = trainingSet.size() / miniBatchSize;
         int currIndex;
@@ -288,14 +306,13 @@ public class NeuralNetwork {
             LOGGER.fine("  Minibatch: " + numBatches);
             updateParameters(trainingBatch, learnRate, trainingBatch.size());
         }
+        LOGGER.info("Gradient descent training completed");
     }
 
     /**
-     * Performs feedforward on a given user input. z_i = sum( w_i * a_{i-1} +
-     * b_i) a_i = activationFunc(z_i)
+     * Performs feedforward on a given user input.
      * 
-     * @param input
-     *            input layer for which to evaluate the output
+     * @param input input layer for which to evaluate the output
      * @return neural network output
      */
     public DoubleMatrix feedForward(DoubleMatrix input) {

@@ -5,17 +5,19 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
-
 import org.jblas.DoubleMatrix;
-
+import com.penna.neural.exceptions.DatasetInitializationException;
 import com.penna.neural.utils.MnistUtils;
 
 public class Dataset implements Iterable<Instance> {
-    
+
     private static final Logger LOGGER = Logger.getLogger(MnistUtils.class.getName());
-    
+
     private List<Instance> instances;
 
+    /**
+     * Constructs an empty dataset.
+     */
     public Dataset() {
         instances = new ArrayList<Instance>();
     }
@@ -29,23 +31,34 @@ public class Dataset implements Iterable<Instance> {
      * 
      * @param numFeatures number of instances' features
      * @param numInstances number of instances to the dataset
+     * @throws DatasetInitializationException if initialization parameters are
+     *             invalid
      */
-    public Dataset(int numFeatures, int numInstances) {
+    public Dataset(int numFeatures, int numInstances) throws DatasetInitializationException {
+        if (numFeatures < 1 || numInstances < 1) {
+            throw new DatasetInitializationException();
+        }
         instances = new ArrayList<Instance>();
         for (int i = 0; i < numInstances; i++) {
             DoubleMatrix features = DoubleMatrix.randn(numFeatures, 1);
             instances.add(new Instance(features));
         }
     }
-    
+
     /**
      * Constructs a dataset with random labelled instances.
      * 
      * @param numFeatures number of instances' features
-     * @param numLabels number of instances'  labels
+     * @param numLabels number of instances' labels
      * @param numInstances number of instances to the dataset
+     * @throws DatasetInitializationException if initialization parameters are
+     *             invalid
      */
-    public Dataset(int numFeatures, int numLabels, int numInstances) {
+    public Dataset(int numFeatures, int numLabels, int numInstances)
+            throws DatasetInitializationException {
+        if (numFeatures < 1 || numInstances < 1 || numLabels < 1) {
+            throw new DatasetInitializationException();
+        }
         instances = new ArrayList<Instance>();
         for (int i = 0; i < numInstances; i++) {
             DoubleMatrix features = DoubleMatrix.randn(numFeatures, 1);
@@ -57,7 +70,7 @@ public class Dataset implements Iterable<Instance> {
     public Instance getInstance(int i) {
         return instances.get(i);
     }
-    
+
     public void add(Instance instance) {
         instances.add(instance);
     }
@@ -69,7 +82,7 @@ public class Dataset implements Iterable<Instance> {
     public Iterator<Instance> getInstances() {
         return instances.iterator();
     }
-    
+
     public Iterator<Instance> iterator() {
         return getInstances();
     }
@@ -80,10 +93,10 @@ public class Dataset implements Iterable<Instance> {
     public void shuffle() {
         Collections.shuffle(instances);
     }
-    
+
     /**
-     * Get a subset of this dataset, by specifying the start and end index from which to subset
-     * from.
+     * Get a subset of this dataset, by specifying the start and end index from
+     * which to subset from.
      * 
      * @param startIdx start index of the subset
      * @param endIdx end index of the subset
@@ -92,13 +105,13 @@ public class Dataset implements Iterable<Instance> {
     public Dataset getSubSet(int startIdx, int endIdx) {
         return new Dataset(instances.subList(startIdx, endIdx));
     }
-    
+
     /**
-     * Removed unlabelled instances from the dataset.
+     * Removes unlabelled instances from the dataset.
      */
     public void removeUnlabelledInstance() {
         int numRemovedInstances = 0;
-        for  (int i = 0; i < instances.size(); i++) {
+        for (int i = 0; i < instances.size(); i++) {
             if (!instances.get(i).isLabelled()) {
                 instances.remove(i);
                 numRemovedInstances++;
